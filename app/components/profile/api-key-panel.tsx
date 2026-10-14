@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Key, Plus, Loader2, Copy, Trash2, ChevronDown, ChevronUp } from "lucide-react"
@@ -32,6 +33,10 @@ type ApiKey = {
 }
 
 export function ApiKeyPanel() {
+  const t = useTranslations("profile.apiKey")
+  const tCommon = useTranslations("common.actions")
+  const tNoPermission = useTranslations("emails.noPermission")
+  const tMessages = useTranslations("emails.messages")
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([])
   const [loading, setLoading] = useState(false)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -47,14 +52,14 @@ export function ApiKeyPanel() {
   const fetchApiKeys = async () => {
     try {
       const res = await fetch("/api/api-keys")
-      if (!res.ok) throw new Error("获取 API Keys 失败")
+      if (!res.ok) throw new Error(t("createFailed"))
       const data = await res.json() as { apiKeys: ApiKey[] }
       setApiKeys(data.apiKeys)
     } catch (error) {
       console.error(error)
       toast({
-        title: "获取失败",
-        description: "获取 API Keys 列表失败",
+        title: t("createFailed"),
+        description: t("createFailed"),
         variant: "destructive"
       })
     } finally {
@@ -81,15 +86,15 @@ export function ApiKeyPanel() {
         body: JSON.stringify({ name: newKeyName })
       })
 
-      if (!res.ok) throw new Error("创建 API Key 失败")
+      if (!res.ok) throw new Error(t("createFailed"))
 
       const data = await res.json() as { key: string }
       setNewKey(data.key)
       fetchApiKeys()
     } catch (error) {
       toast({
-        title: "创建失败",
-        description: error instanceof Error ? error.message : "请稍后重试",
+        title: t("createFailed"),
+        description: error instanceof Error ? error.message : t("createFailed"),
         variant: "destructive"
       })
       setCreateDialogOpen(false)
@@ -112,7 +117,7 @@ export function ApiKeyPanel() {
         body: JSON.stringify({ enabled })
       })
 
-      if (!res.ok) throw new Error("更新失败")
+      if (!res.ok) throw new Error(t("createFailed"))
 
       setApiKeys(keys =>
         keys.map(key =>
@@ -122,8 +127,8 @@ export function ApiKeyPanel() {
     } catch (error) {
       console.error(error)
       toast({
-        title: "更新失败",
-        description: "更新 API Key 状态失败",
+        title: t("createFailed"),
+        description: t("createFailed"),
         variant: "destructive"
       })
     }
@@ -135,18 +140,18 @@ export function ApiKeyPanel() {
         method: "DELETE"
       })
 
-      if (!res.ok) throw new Error("删除失败")
+      if (!res.ok) throw new Error(t("deleteFailed"))
 
       setApiKeys(keys => keys.filter(key => key.id !== id))
       toast({
-        title: "删除成功",
-        description: "API Key 已删除"
+        title: t("deleteSuccess"),
+        description: t("deleteSuccess")
       })
     } catch (error) {
       console.error(error)
       toast({
-        title: "删除失败",
-        description: "删除 API Key 失败",
+        title: t("deleteFailed"),
+        description: t("deleteFailed"),
         variant: "destructive"
       })
     }
@@ -157,7 +162,7 @@ export function ApiKeyPanel() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Key className="w-5 h-5 text-primary" />
-          <h2 className="text-lg font-semibold">API Keys</h2>
+          <h2 className="text-lg font-semibold">{t("title")}</h2>
         </div>
         {
           canManageApiKey && (
@@ -165,17 +170,17 @@ export function ApiKeyPanel() {
               <DialogTrigger asChild>
                 <Button className="gap-2" onClick={() => setCreateDialogOpen(true)}>
                   <Plus className="w-4 h-4" />
-                  创建 API Key
+                  {t("create")}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>
-                    {newKey ? "API Key 创建成功" : "创建新的 API Key"}
+                    {newKey ? t("createSuccess") : t("create")}
                   </DialogTitle>
                   {newKey && (
                     <DialogDescription className="text-destructive">
-                      请立即保存此密钥，它只会显示一次且无法恢复
+                      {t("description")}
                     </DialogDescription>
                   )}
                 </DialogHeader>
@@ -183,18 +188,18 @@ export function ApiKeyPanel() {
                 {!newKey ? (
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label>名称</Label>
+                      <Label>{t("name")}</Label>
                       <Input
                         value={newKeyName}
                         onChange={(e) => setNewKeyName(e.target.value)}
-                        placeholder="为你的 API Key 起个名字"
+                        placeholder={t("namePlaceholder")}
                       />
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label>API Key</Label>
+                      <Label>{t("key")}</Label>
                       <div className="flex gap-2">
                         <Input
                           value={newKey}
@@ -220,7 +225,7 @@ export function ApiKeyPanel() {
                       onClick={handleDialogClose}
                       disabled={loading}
                     >
-                      {newKey ? "完成" : "取消"}
+                      {newKey ? tCommon("ok") : tCommon("cancel")}
                     </Button>
                   </DialogClose>
                   {!newKey && (
@@ -231,7 +236,7 @@ export function ApiKeyPanel() {
                       {loading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        "创建"
+                        t("create")
                       )}
                     </Button>
                   )}
@@ -245,11 +250,11 @@ export function ApiKeyPanel() {
       {
         !canManageApiKey ? (
           <div className="text-center text-muted-foreground py-8">
-            <p>需要公爵或更高权限才能管理 API Key</p>
-            <p className="mt-2">请联系网站管理员升级您的角色</p>
+            <p>{tNoPermission("needPermission")}</p>
+            <p className="mt-2">{tNoPermission("contactAdmin")}</p>
             {
               config?.adminContact && (
-                <p className="mt-2">管理员联系方式：{config.adminContact}</p>
+                <p className="mt-2">{tNoPermission("adminContact")}: {config.adminContact}</p>
               )
             }
           </div>
@@ -261,7 +266,7 @@ export function ApiKeyPanel() {
                   <Loader2 className="w-6 h-6 text-primary animate-spin" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">加载中...</p>
+                  <p className="text-sm text-muted-foreground">{tMessages("loading")}</p>
                 </div>
               </div>
             ) : apiKeys.length === 0 ? (
@@ -270,9 +275,9 @@ export function ApiKeyPanel() {
                   <Key className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium">没有 API Keys</h3>
+                  <h3 className="text-lg font-medium">{t("noKeys")}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    点击上方的创建 &quot;API Key&quot; 按钮来创建你的第一个 API Key
+                    {t("description")}
                   </p>
                 </div>
               </div>
@@ -286,7 +291,7 @@ export function ApiKeyPanel() {
                     <div className="space-y-1">
                       <div className="font-medium">{key.name}</div>
                       <div className="text-sm text-muted-foreground">
-                        创建于 {new Date(key.createdAt).toLocaleString()}
+                        {t("createdAt")}: {new Date(key.createdAt).toLocaleString()}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -312,14 +317,14 @@ export function ApiKeyPanel() {
                     onClick={() => setShowExamples(!showExamples)}
                   >
                     {showExamples ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    查看使用文档
+                    {t("viewDocs")}
                   </button>
 
                   {showExamples && (
                     <div className="rounded-lg border bg-card p-4 space-y-4">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">获取系统配置</div>
+                          <div className="text-sm font-medium">{t("docs.getConfig")}</div>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -339,7 +344,7 @@ export function ApiKeyPanel() {
 
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">生成临时邮箱</div>
+                          <div className="text-sm font-medium">{t("docs.generateEmail")}</div>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -371,7 +376,7 @@ export function ApiKeyPanel() {
 
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">获取邮箱列表</div>
+                          <div className="text-sm font-medium">{t("docs.getEmails")}</div>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -391,7 +396,7 @@ export function ApiKeyPanel() {
 
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">获取邮件列表</div>
+                          <div className="text-sm font-medium">{t("docs.getMessages")}</div>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -411,7 +416,7 @@ export function ApiKeyPanel() {
 
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">获取单封邮件</div>
+                          <div className="text-sm font-medium">{t("docs.getMessage")}</div>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -429,17 +434,147 @@ export function ApiKeyPanel() {
                         </pre>
                       </div>
 
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.createEmailShare")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl -X POST ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share \\
+  -H "X-API-Key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"expiresIn": 86400000}'`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl -X POST ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share \\
+  -H "X-API-Key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"expiresIn": 86400000}'`}
+                        </pre>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.getEmailShares")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share \\
+  -H "X-API-Key: YOUR_API_KEY"`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share \\
+  -H "X-API-Key: YOUR_API_KEY"`}
+                        </pre>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.deleteEmailShare")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl -X DELETE ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share/{shareId} \\
+  -H "X-API-Key: YOUR_API_KEY"`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl -X DELETE ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/share/{shareId} \\
+  -H "X-API-Key: YOUR_API_KEY"`}
+                        </pre>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.createMessageShare")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl -X POST ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share \\
+  -H "X-API-Key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"expiresIn": 0}'`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl -X POST ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share \\
+  -H "X-API-Key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"expiresIn": 0}'`}
+                        </pre>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.getMessageShares")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share \\
+  -H "X-API-Key: YOUR_API_KEY"`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share \\
+  -H "X-API-Key: YOUR_API_KEY"`}
+                        </pre>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">{t("docs.deleteMessageShare")}</div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(
+                              `curl -X DELETE ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share/{shareId} \\
+  -H "X-API-Key: YOUR_API_KEY"`
+                            )}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <pre className="text-xs bg-muted/50 rounded-lg p-4 overflow-x-auto">
+                          {`curl -X DELETE ${window.location.protocol}//${window.location.host}/api/emails/{emailId}/messages/{messageId}/share/{shareId} \\
+  -H "X-API-Key: YOUR_API_KEY"`}
+                        </pre>
+                      </div>
+
                       <div className="text-xs text-muted-foreground mt-4">
-                        <p>注意：</p>
+                        <p>{t("docs.notes")}</p>
                         <ul className="list-disc list-inside space-y-1 mt-2">
-                          <li>请将 YOUR_API_KEY 替换为你的实际 API Key</li>
-                          <li>/api/config 接口可获取系统配置，包括可用的邮箱域名列表</li>
-                          <li>emailId 是邮箱的唯一标识符</li>
-                          <li>messageId 是邮件的唯一标识符</li>
-                          <li>expiryTime 是邮箱的有效期（毫秒），可选值：3600000（1小时）、86400000（1天）、604800000（7天）、0（永久）</li>
-                          <li>domain 是邮箱域名，可通过 /api/config 接口获取可用域名列表</li>
-                          <li>cursor 用于分页，从上一次请求的响应中获取 nextCursor</li>
-                          <li>所有请求都需要包含 X-API-Key 请求头</li>
+                          <li>{t("docs.note1")}</li>
+                          <li>{t("docs.note2")}</li>
+                          <li>{t("docs.note3")}</li>
+                          <li>{t("docs.note4")}</li>
+                          <li>{t("docs.note5")}</li>
+                          <li>{t("docs.note6")}</li>
+                          <li>{t("docs.note7")}</li>
+                          <li>{t("docs.note8")}</li>
+                          <li>{t("docs.note9")}</li>
+                          <li>{t("docs.note10")}</li>
                         </ul>
                       </div>
                     </div>

@@ -1,0 +1,19 @@
+{
+  "app": {
+    "name": "MoeMail"
+  },
+  "actions": {
+    "ok": "确定",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除"
+  },
+  "nav": {
+    "home": "首页",
+    "login": "登录",
+    "profile": "个人中心",
+    "logout": "退出登录",
+    "backToMailbox": "返回邮箱"
+  },
+  "github": "获取网站源代码"
+}

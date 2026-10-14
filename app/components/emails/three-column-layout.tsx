@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { EmailList } from "./email-list"
 import { MessageListContainer } from "./message-list-container"
 import { MessageView } from "./message-view"
@@ -16,6 +17,7 @@ interface Email {
 }
 
 export function ThreeColumnLayout() {
+  const t = useTranslations("emails.layout")
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null)
   const [selectedMessageType, setSelectedMessageType] = useState<'received' | 'sent'>('received')
@@ -55,7 +57,7 @@ export function ThreeColumnLayout() {
       <div className="hidden lg:grid grid-cols-12 gap-4 h-full min-h-0">
         <div className={cn("col-span-3", columnClass)}>
           <div className={headerClass}>
-            <h2 className={titleClass}>我的邮箱</h2>
+            <h2 className={titleClass}>{t("myEmails")}</h2>
           </div>
           <div className="flex-1 overflow-auto">
             <EmailList
@@ -88,7 +90,7 @@ export function ThreeColumnLayout() {
                   )}
                 </div>
               ) : (
-                "选择邮箱查看消息"
+                t("selectEmail")
               )}
             </h2>
           </div>
@@ -107,7 +109,7 @@ export function ThreeColumnLayout() {
         <div className={cn("col-span-5", columnClass)}>
           <div className={headerClass}>
             <h2 className={titleClass}>
-              {selectedMessageId ? "邮件内容" : "选择邮件查看详情"}
+              {selectedMessageId ? t("messageContent") : t("selectMessage")}
             </h2>
           </div>
           {selectedEmail && selectedMessageId && (
@@ -129,7 +131,7 @@ export function ThreeColumnLayout() {
           {mobileView === "list" && (
             <>
               <div className={headerClass}>
-                <h2 className={titleClass}>我的邮箱</h2>
+                <h2 className={titleClass}>{t("myEmails")}</h2>
               </div>
               <div className="flex-1 overflow-auto">
                 <EmailList
@@ -151,10 +153,10 @@ export function ThreeColumnLayout() {
                   }}
                   className="text-sm text-primary shrink-0"
                 >
-                  ← 返回邮箱列表
+                  {t("backToEmailList")}
                 </button>
                 <div className="flex-1 flex justify-between items-center gap-2 min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <span className="truncate min-w-0 flex-1 text-right">{selectedEmail.address}</span>
                     <div className="shrink-0 cursor-pointer text-primary" onClick={copyEmailAddress}>
                       <Copy className="size-4" />
@@ -187,9 +189,9 @@ export function ThreeColumnLayout() {
                   onClick={() => setSelectedMessageId(null)}
                   className="text-sm text-primary"
                 >
-                  ← 返回消息列表
+                  {t("backToMessageList")}
                 </button>
-                <span className="text-sm font-medium">邮件内容</span>
+                <span className="text-sm font-medium">{t("messageContent")}</span>
               </div>
               <div className="flex-1 overflow-auto">
                 <MessageView

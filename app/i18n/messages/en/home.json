@@ -1,0 +1,27 @@
+{
+  "title": "MoeMail",
+  "subtitle": "Cute Temporary Email Service",
+  "features": {
+    "privacy": {
+      "title": "Privacy Protection",
+      "description": "Protect your real email address"
+    },
+    "instant": {
+      "title": "Email Sharing",
+      "description": "Share your mailbox with others"
+    },
+    "expiry": {
+      "title": "Auto Expiry",
+      "description": "Automatically expires when due"
+    },
+    "openapi": {
+      "title": "Open API",
+      "description": "Full OpenAPI interface available"
+    }
+  },
+  "actions": {
+    "enterMailbox": "Enter Mailbox",
+    "getStarted": "Get Started"
+  }
+}
+

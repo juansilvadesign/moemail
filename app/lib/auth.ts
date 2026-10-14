@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
+import Google from "next-auth/providers/google"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { createDb, Db } from "./db"
 import { accounts, users, roles, userRoles } from "./schema"
@@ -8,9 +9,10 @@ import { getRequestContext } from "@cloudflare/next-on-pages"
 import { Permission, hasPermission, ROLES, Role } from "./permissions"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { hashPassword, comparePassword } from "@/lib/utils"
-import { authSchema } from "@/lib/validation"
+import { authSchema, AuthSchema } from "@/lib/validation"
 import { generateAvatarUrl } from "./avatar"
 import { getUserId } from "./apiKey"
+import { verifyTurnstileToken } from "./turnstile"
 
 const ROLE_DESCRIPTIONS: Record<Role, string> = {
   [ROLES.EMPEROR]: "皇帝（网站所有者）",
@@ -29,7 +31,7 @@ const getDefaultRole = async (): Promise<Role> => {
   ) {
     return defaultRole as Role
   }
-  
+
   return ROLES.CIVILIAN
 }
 
@@ -101,6 +103,13 @@ export const {
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+      allowDangerousEmailAccountLinking: true,
+      issuer: "https://github.com/login/oauth",
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -113,26 +122,35 @@ export const {
           throw new Error("请输入用户名和密码")
         }
 
-        const { username, password } = credentials
+        const { username, password, turnstileToken } = credentials as Record<string, string | undefined>
 
+        let parsedCredentials: AuthSchema
         try {
-          authSchema.parse({ username, password })
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          parsedCredentials = authSchema.parse({ username, password, turnstileToken })
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           throw new Error("输入格式不正确")
+        }
+
+        const verification = await verifyTurnstileToken(parsedCredentials.turnstileToken)
+        if (!verification.success) {
+          if (verification.reason === "missing-token") {
+            throw new Error("请先完成安全验证")
+          }
+          throw new Error("安全验证未通过")
         }
 
         const db = createDb()
 
         const user = await db.query.users.findFirst({
-          where: eq(users.username, username as string),
+          where: eq(users.username, parsedCredentials.username),
         })
 
         if (!user) {
           throw new Error("用户名或密码错误")
         }
 
-        const isValid = await comparePassword(password as string, user.password as string)
+        const isValid = await comparePassword(parsedCredentials.password, user.password as string)
         if (!isValid) {
           throw new Error("用户名或密码错误")
         }
@@ -186,7 +204,7 @@ export const {
           where: eq(userRoles.userId, session.user.id),
           with: { role: true },
         })
-  
+
         if (!userRoleRecords.length) {
           const defaultRole = await getDefaultRole()
           const role = await findOrCreateRole(db, defaultRole)
@@ -198,10 +216,16 @@ export const {
             role: role
           }]
         }
-  
+
         session.user.roles = userRoleRecords.map(ur => ({
           name: ur.role.name,
         }))
+
+        const userAccounts = await db.query.accounts.findMany({
+          where: eq(accounts.userId, session.user.id),
+        })
+
+        session.user.providers = userAccounts.map(account => account.provider)
       }
 
       return session
@@ -214,7 +238,7 @@ export const {
 
 export async function register(username: string, password: string) {
   const db = createDb()
-  
+
   const existing = await db.query.users.findFirst({
     where: eq(users.username, username)
   })
@@ -224,7 +248,7 @@ export async function register(username: string, password: string) {
   }
 
   const hashedPassword = await hashPassword(password)
-  
+
   const [user] = await db.insert(users)
     .values({
       username,

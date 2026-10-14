@@ -40,8 +40,14 @@ export async function handleApiKeyAuth(apiKey: string, pathname: string) {
     )
   }
 
-  const response = NextResponse.next()
-  response.headers.set("X-User-Id", user.id)
+  const requestHeaders = new Headers(await headers())
+  requestHeaders.set("X-User-Id", user.id)
+  
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders
+    }
+  })
   return response
 }
 

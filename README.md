@@ -1,426 +1,448 @@
+
 <p align="center">
   <img src="public/icons/icon-192x192.png" alt="MoeMail Logo" width="100" height="100">
   <h1 align="center">MoeMail</h1>
 </p>
 
 <p align="center">
-  一个基于 NextJS + Cloudflare 技术栈构建的可爱临时邮箱服务🎉
+  A cute temporary email service built with NextJS + Cloudflare technology stack 🎉
 </p>
 
 <p align="center">
-  <a href="#在线演示">在线演示</a> •
-  <a href="#特性">特性</a> •
-  <a href="#技术栈">技术栈</a> •
-  <a href="#本地运行">本地运行</a> •
-  <a href="#部署">部署</a> •
-  <a href="#邮箱域名配置">邮箱域名配置</a> •
-  <a href="#权限系统">权限系统</a> •
-  <a href="#系统设置">系统设置</a> •
-  <a href="#发件功能">发件功能</a> •
-  <a href="#Webhook 集成">Webhook 集成</a> •
-  <a href="#OpenAPI">OpenAPI</a> •
-  <a href="#环境变量">环境变量</a> •
-  <a href="#Github OAuth App 配置">Github OAuth App 配置</a> •
-  <a href="#贡献">贡献</a> •
-  <a href="#许可证">许可证</a> •
-  <a href="#交流群">交流群</a> •
-  <a href="#支持">支持</a>
+  <span>English</span> | 
+  <a href="./README.zh-CN.md">简体中文</a>
 </p>
 
-## 在线演示
+<p align="center">
+  <a href="https://www.producthunt.com/products/moemail?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-moemail" target="_blank" rel="noopener noreferrer"><img alt="MoeMail - OpenAPI‑first temp email, hosted &amp; ready | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1078475&amp;theme=light&amp;t=1770964043604"></a>
+</p>
+
+<p align="center">
+  <a href="#live-demo">Live Demo</a> •
+  <a href="#documentation">Documentation</a> •
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#local-run">Local Run</a> •
+  <a href="#deployment">Deployment</a> •
+  <a href="#email-domain-configuration">Email Domain Config</a> •
+  <a href="#permission-system">Permission System</a> •
+  <a href="#system-settings">System Settings</a> •
+  <a href="#sending-emails">Sending Emails</a> •
+  <a href="#webhook-integration">Webhook Integration</a> •
+  <a href="#openapi">OpenAPI</a> •
+  <a href="#cli-tool">CLI Tool</a> •
+  <a href="#mcp-server">MCP Server</a> •
+  <a href="#environment-variables">Environment Variables</a> •
+  <a href="#github-oauth-app-configuration">Github OAuth Config</a> •
+  <a href="#google-oauth-app-configuration">Google OAuth Config</a> •
+  <a href="#contribution">Contribution</a> •
+  <a href="#license">License</a> •
+  <a href="#community">Community</a> •
+  <a href="#support">Support</a>
+</p>
+
+## Live Demo
 [https://moemail.app](https://moemail.app)
 
-![首页](https://pic.otaku.ren/20241209/AQADwsUxG9k1uVZ-.jpg "首页")
+![Home](https://pic.otaku.ren/20241209/AQADwsUxG9k1uVZ-.jpg "Home")
 
+![Mailbox](https://pic.otaku.ren/20241209/AQADw8UxG9k1uVZ-.jpg "Mailbox")
 
-![邮箱](https://pic.otaku.ren/20241209/AQADw8UxG9k1uVZ-.jpg "邮箱")
+![Profile](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "Profile")
 
-![个人中心](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "个人中心")
+## Documentation
+**Full Documentation**: [https://docs.moemail.app](https://docs.moemail.app)
 
-## 特性
+The documentation site contains detailed usage guides, API documentation, deployment tutorials, and other complete information.
 
-- 🔒 **隐私保护**：保护您的真实邮箱地址，远离垃圾邮件和不必要的订阅
-- ⚡ **实时收件**：自动轮询，即时接收邮件通知
-- ⏱️ **灵活有效期**：支持 1 小时、24 小时、3 天或永久有效
-- 🎨 **主题切换**：支持亮色和暗色模式
-- 📱 **响应式设计**：完美适配桌面和移动设备
-- 🔄 **自动清理**：自动清理过期的邮箱和邮件
-- 📱 **PWA 支持**：支持 PWA 安装
-- 💸 **免费自部署**：基于 Cloudflare 构建, 可实现免费自部署，无需任何费用
-- 🎉 **可爱的 UI**：简洁可爱萌萌哒 UI 界面
-- 📤 **发件功能**：支持使用临时邮箱发送邮件，基于 Resend 服务
-- 🔔 **Webhook 通知**：支持通过 webhook 接收新邮件通知
-- 🛡️ **权限系统**：支持基于角色的权限控制系统
-- 🔑 **OpenAPI**：支持通过 API Key 访问 OpenAPI
+## Features
 
-## 技术栈
+- 🔒 **Privacy Protection**: Protect your real email address from spam and unnecessary subscriptions
+- ⚡ **Real-time Receipt**: Automatic polling, receive email notifications instantly
+- ⏱️ **Flexible Validity**: Supports 1 hour, 24 hours, 3 days, or permanent validity
+- 🎨 **Theme Switching**: Supports light and dark modes
+- 📱 **Responsive Design**: Perfectly adapted for desktop and mobile devices
+- 🔄 **Auto Cleanup**: Automatically cleans up expired mailboxes and emails
+- 📱 **PWA Support**: Support PWA installation
+- 💸 **Free Self-hosting**: Built on Cloudflare, capable of free self-hosting without any cost
+- 🎉 **Cute UI**: Simple and cute UI interface
+- 📤 **Sending Function**: Support sending emails using temporary addresses, based on Resend service
+- 🔔 **Webhook Notification**: Support receiving new email notifications via webhook
+- 🛡️ **Permission System**: Role-based access control system
+- 🔑 **OpenAPI**: Support accessing OpenAPI via API Key
+- 🤖 **Agent-first CLI**: CLI tool designed for AI agents to automate email workflows
+- 🌍 **Multi-language Support**: Supports Chinese and English interfaces, freely switchable
 
-- **框架**: [Next.js](https://nextjs.org/) (App Router)
-- **平台**: [Cloudflare Pages](https://pages.cloudflare.com/)
-- **数据库**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite)
-- **认证**: [NextAuth](https://authjs.dev/getting-started/installation?framework=Next.js) 配合 GitHub 登录
-- **样式**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI 组件**: 基于 [Radix UI](https://www.radix-ui.com/) 的自定义组件
-- **邮件处理**: [Cloudflare Email Workers](https://developers.cloudflare.com/email-routing/)
-- **类型安全**: [TypeScript](https://www.typescriptlang.org/)
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Platform**: [Cloudflare Pages](https://pages.cloudflare.com/)
+- **Database**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite)
+- **Authentication**: [NextAuth](https://authjs.dev/getting-started/installation?framework=Next.js) with GitHub/Google Login
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: Custom components based on [Radix UI](https://www.radix-ui.com/)
+- **Email Handling**: [Cloudflare Email Workers](https://developers.cloudflare.com/email-routing/)
+- **Type Safety**: [TypeScript](https://www.typescriptlang.org/)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/)
 
-## 本地运行
+## Local Run
 
-### 前置要求
+### Prerequisites
 
 - Node.js 18+
 - Pnpm
 - Wrangler CLI
-- Cloudflare 账号
+- Cloudflare Account
 
-### 安装
+### Installation
 
-1. 克隆仓库：
+1. Clone the repository:
 ```bash
 git clone https://github.com/beilunyang/moemail.git
 cd moemail
 ```
 
-2. 安装依赖：
+2. Install dependencies:
 ```bash
 pnpm install
 ```
 
-3. 设置 wrangler：
+3. Setup Wrangler:
 ```bash
 cp wrangler.example.json wrangler.json
 cp wrangler.email.example.json wrangler.email.json
 cp wrangler.cleanup.example.json wrangler.cleanup.json
 ```
-设置 Cloudflare D1 数据库名以及数据库 ID
+Set Cloudflare D1 database name and database ID.
 
-4. 设置环境变量：
+4. Setup Environment Variables:
 ```bash
 cp .env.example .env.local
 ```
-设置 AUTH_GITHUB_ID, AUTH_GITHUB_SECRET, AUTH_SECRET
+Set `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, `AUTH_SECRET`.
 
-5. 创建本地数据库表结构
+5. Create local database schema:
 ```bash
 pnpm db:migrate-local
 ```
 
-### 开发
+### Development
 
-1. 启动开发服务器：
+1. Start development server:
 ```bash
 pnpm dev
 ```
 
-2. 测试邮件 worker：
-目前无法本地运行并测试，请使用 wrangler 部署邮件 worker 并测试
+2. Test Email Worker:
+Currently cannot run and test locally, please use Wrangler to deploy the email worker and test.
 ```bash
 pnpm deploy:email
 ```
 
-3. 测试清理 worker：
+3. Test Cleanup Worker:
 ```bash
 pnpm dev:cleanup
 pnpm test:cleanup
 ```
 
-4. 生成 Mock 数据（邮箱以及邮件消息）
+4. Generate Mock Data (Mailboxes and Messages):
 ```bash
 pnpm generate-test-data
 ```
-## 部署
 
-### 视频版保姆级部署教程
-https://www.bilibili.com/video/BV19wrXY2ESM/
+## Deployment
 
-### 本地 Wrangler 部署
-1. 创建 .env 文件
+### Video Tutorial
+https://www.youtube.com/watch?v=Vcw3nqsq2-E
+
+### Local Wrangler Deployment
+1. Create .env file
 ```bash
 cp .env.example .env
 ```
-2. 在 .env 文件中设置[环境变量](#环境变量)
+2. Set [Environment Variables](#environment-variables) in the .env file.
 
-3. 运行部署脚本
+3. Run deployment script
 ```bash
 pnpm dlx tsx ./scripts/deploy/index.ts
 ```
 
-### Github Actions 部署
+### Github Actions Deployment
 
-本项目可使用 GitHub Actions 实现自动化部署。支持以下触发方式：
+This project supports automated deployment using GitHub Actions. It supports the following triggers:
 
-1. **自动触发**：推送新的 tag 时自动触发部署流程
-2. **手动触发**：在 GitHub Actions 页面手动触发
+1. **Auto Trigger**: Automatically triggers deployment flow when a new tag is pushed.
+2. **Manual Trigger**: Manually trigger in the GitHub Actions page.
 
-#### 部署步骤
+#### Deployment Steps
 
-1. 在 GitHub 仓库设置中添加以下 Secrets：
-   - `CLOUDFLARE_API_TOKEN`: Cloudflare API 令牌
-   - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare 账户 ID
+1. Add the following Secrets in GitHub repository settings:
+   - `CLOUDFLARE_API_TOKEN`: Cloudflare API Token
+   - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare Account ID
    - `AUTH_GITHUB_ID`: GitHub OAuth App ID
    - `AUTH_GITHUB_SECRET`: GitHub OAuth App Secret
-   - `AUTH_SECRET`: NextAuth Secret，用来加密 session，请设置一个随机字符串
-   - `CUSTOM_DOMAIN`: 网站自定义域名，用于访问 MoeMail (可选， 如果不填, 则会使用 Cloudflare Pages 默认域名)
-   - `PROJECT_NAME`: Pages 项目名 （可选，如果不填，则为 moemail） 
-   - `DATABASE_NAME`: D1 数据库名称 (可选，如果不填，则为 moemail-db)
-   - `KV_NAMESPACE_NAME`: Cloudflare KV namespace 名称，用于存储网站配置 （可选，如果不填，则为 moemail-kv）
+   - `AUTH_SECRET`: NextAuth Secret, used to encrypt session, please set a random string
+   - `CUSTOM_DOMAIN`: Custom domain for the website (Optional, if empty, uses Cloudflare Pages default domain)
+   - `PROJECT_NAME`: Pages project name (Optional, if empty, defaults to moemail)
+   - `DATABASE_NAME`: D1 database name (Optional, if empty, defaults to moemail-db)
+   - `KV_NAMESPACE_NAME`: Cloudflare KV namespace name, used for site settings (Optional, if empty, defaults to moemail-kv)
 
-2. 选择触发方式：
+2. Choose trigger method:
 
-   **方式一：推送 tag 触发**
+   **Method 1: Push Tag Trigger**
    ```bash
-   # 创建新的 tag
+   # Create a new tag
    git tag v1.0.0
    
-   # 推送 tag 到远程仓库
+   # Push tag to remote repository
    git push origin v1.0.0
    ```
 
-   **方式二：手动触发**
-   - 进入仓库的 Actions 页面
-   - 选择 "Deploy" workflow
-   - 点击 "Run workflow"
+   **Method 2: Manual Trigger**
+   - Go to the Actions page of the repository
+   - Select "Deploy" workflow
+   - Click "Run workflow"
 
-3. 部署进度可以在仓库的 Actions 标签页查看
+3. Deployment progress can be viewed in the Actions tab of the repository.
 
-#### 注意事项
-- 确保所有 Secrets 都已正确设置
-- 使用 tag 触发时，tag 必须以 `v` 开头（例如：v1.0.0）
+#### Notes
+- Ensure all Secrets are set correctly.
+- When using tag trigger, the tag must start with `v` (e.g., v1.0.0).
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/beilunyang/moemail)
 
 
-## 邮箱域名配置
+## Email Domain Configuration
 
-在 MoeMail 个人中心页面，可以配置网站的邮箱域名，支持多域名配置，多个域名用逗号分隔
-![邮箱域名配置](https://pic.otaku.ren/20241227/AQAD88AxG67zeVd-.jpg "邮箱域名配置")
+In the MoeMail User Profile page, you can configure the site's email domains. Supports multiple domain configurations, separated by commas.
+![Email Domain Configuration](https://pic.otaku.ren/20241227/AQAD88AxG67zeVd-.jpg "Email Domain Configuration")
 
-### Cloudflare 邮件路由配置
+### Cloudflare Email Routing Configuration
 
-为了使邮箱域名生效，还需要在 Cloudflare 控制台配置邮件路由，将收到的邮件转发给 Email Worker 处理。
+To make email domains effective, you also need to configure email routing in the Cloudflare console to forward received emails to the Email Worker.
 
-1. 登录 [Cloudflare 控制台](https://dash.cloudflare.com/)
-2. 选择您的域名
-3. 点击左侧菜单的 "电子邮件" -> "电子邮件路由"
-4. 如果显示 “电子邮件路由当前被禁用，没有在路由电子邮件”，请点击 "启用电子邮件路由"
-![启用电子邮件路由](https://pic.otaku.ren/20241223/AQADNcQxG_K0SVd-.jpg "启用电子邮件路由")
-5. 点击后，会提示你添加电子邮件路由 DNS 记录，点击 “添加记录并启用” 即可
-![添加电子邮件路由 DNS 记录](https://pic.otaku.ren/20241223/AQADN8QxG_K0SVd-.jpg "添加电子邮件路由 DNS 记录")
-6. 配置路由规则：
-   - Catch-all 地址: 启用 "Catch-all"
-   - 编辑 Catch-all 地址
-    - 操作: 选择 "发送到 Worker"
-    - 目标位置: 选择刚刚部署的 "email-receiver-worker"
-    - 保存
-  ![配置路由规则](https://pic.otaku.ren/20241223/AQADNsQxG_K0SVd-.jpg "配置路由规则")
+1. Login to [Cloudflare Console](https://dash.cloudflare.com/)
+2. Select your domain
+3. Click "Email" -> "Email Routing" in the left menu
+4. If it shows "Email Routing is currently disabled", please click "Enable Email Routing"
+![Enable Email Routing](https://pic.otaku.ren/20241223/AQADNcQxG_K0SVd-.jpg "Enable Email Routing")
+5. After clicking, it will prompt you to add Email Routing DNS records, click "Add records and enable"
+![Add DNS Records](https://pic.otaku.ren/20241223/AQADN8QxG_K0SVd-.jpg "Add DNS Records")
+6. Configure Routing Rules:
+   - Catch-all address: Enable "Catch-all"
+   - Edit Catch-all address
+    - Action: Select "Send to Worker"
+    - Destination: Select the "email-receiver-worker" you just deployed
+    - Save
+  ![Configure Routing Rules](https://pic.otaku.ren/20241223/AQADNsQxG_K0SVd-.jpg "Configure Routing Rules")
 
-### 注意事项
-- 确保域名的 DNS 托管在 Cloudflare
-- Email Worker 必须已经部署成功
-- 如果 Catch-All 状态不可用(一直 loading)，请点击`路由规则`旁边的`目标地址`, 进去绑定一个邮箱
+### Notes
+- Ensure domain DNS is hosted on Cloudflare.
+- Email Worker must be successfully deployed.
+- If Catch-All status is unavailable (stuck loading), please click `Destination addresses` next to `Routing rules`, and bind an email address there.
 
-## 权限系统
+## Permission System
 
-本项目采用基于角色的权限控制系统（RBAC）。
+The project uses a Role-Based Access Control (RBAC) system.
 
-### 角色配置
+### Role Configuration
 
-新用户默认角色由皇帝在个人中心的网站设置中配置：
-- 公爵：新用户将获得临时邮箱、Webhook 配置权限以及 API Key 管理权限
-- 骑士：新用户将获得临时邮箱和 Webhook 配置权限
-- 平民：新用户无任何权限，需要等待皇帝册封为骑士或公爵
+New user default roles are configured by the Emperor in the site settings in the User Profile:
+- Duke: New users get temporary email, Webhook config permissions, and API Key management permissions.
+- Knight: New users get temporary email and Webhook config permissions.
+- Civilian: New users have no permissions, need to wait for Emperor to promote to Knight or Duke.
 
-### 角色等级
+### Role Levels
 
-系统包含四个角色等级：
+The system includes four role levels:
 
-1. **皇帝（Emperor）**
-   - 网站所有者
-   - 拥有所有权限
-   - 每个站点只能有一个皇帝
+1. **Emperor**
+   - Website Owner
+   - Has all permissions
+   - Only one Emperor per site
 
-2. **公爵（Duke）**  
-   - 超级用户
-   - 可以使用临时邮箱功能
-   - 可以配置 Webhook
-   - 可以使用创建 API Key 调用 OpenAPI
-   - 可以被皇帝贬为骑士或平民
+2. **Duke**
+   - Super User
+   - Can use temporary email features
+   - Can configure Webhook
+   - Can create API Key to call OpenAPI
+   - Can be demoted to Knight or Civilian by Emperor
 
-3. **骑士（Knight）**
-   - 高级用户
-   - 可以使用临时邮箱功能
-   - 可以配置 Webhook
-   - 可以被皇帝贬为平民或册封为公爵
+3. **Knight**
+   - Advanced User
+   - Can use temporary email features
+   - Can configure Webhook
+   - Can be demoted to Civilian or promoted to Duke by Emperor
 
-3. **平民（Civilian）**
-   - 普通用户
-   - 无任何权限
-   - 可以被皇帝册封为骑士或者公爵
+4. **Civilian**
+   - Regular User
+   - No permissions
+   - Can be promoted to Knight or Duke by Emperor
 
-### 角色升级
+### Role Upgrade
 
-1. **成为皇帝**
-   - 第一个访问 `/api/roles/init-emperor` 接口的用户将成为皇帝，即网站所有者
-   - 站点已有皇帝后，无法再提升其他用户为皇帝
+1. **Become Emperor**
+   - The first user to visit `/api/roles/init-emperor` interface will become the Emperor (Website Owner).
+   - Once an Emperor exists, no other user can be promoted to Emperor.
 
-2. **角色变更**
-   - 皇帝可以在个人中心页面将其他用户设为公爵、骑士或平民
+2. **Role Changes**
+   - The Emperor can set other users as Duke, Knight, or Civilian in the User Profile page.
 
-### 权限说明
+### Permission Details
 
-- **邮箱管理**：创建和管理临时邮箱
-- **Webhook 管理**：配置邮件通知的 Webhook
-- **API Key 管理**：创建和管理 API 访问密钥
-- **用户管理**：升降用户角色
-- **系统设置**：管理系统全局设置
+- **Email Management**: Create and manage temporary emails
+- **Webhook Management**: Configure Webhooks for email notifications
+- **API Key Management**: Create and manage API access keys
+- **User Management**: Promote/Demote user roles
+- **System Settings**: Manage global system settings
 
-## 系统设置
+## System Settings
 
-系统设置存储在 Cloudflare KV 中，包括以下内容：
+System settings are stored in Cloudflare KV, including:
 
-- `DEFAULT_ROLE`: 新注册用户默认角色，可选值为 `CIVILIAN`、`KNIGHT`、`DUKE`
-- `EMAIL_DOMAINS`: 支持的邮箱域名，多个域名用逗号分隔
-- `ADMIN_CONTACT`: 管理员联系方式
-- `MAX_EMAILS`: 每个用户可创建的最大邮箱数量
+- `DEFAULT_ROLE`: Default role for new users, values: `CIVILIAN`, `KNIGHT`, `DUKE`
+- `EMAIL_DOMAINS`: Supported email domains, comma-separated
+- `ADMIN_CONTACT`: Administrator contact info
+- `MAX_EMAILS`: Maximum number of emails per user
 
-**皇帝**角色可以在个人中心页面设置
+**Emperor** role can configure these in the User Profile page.
 
-## 发件功能
+## Sending Emails
 
-MoeMail 支持使用临时邮箱发送邮件，基于 [Resend](https://resend.com/) 服务。
+MoeMail supports sending emails using temporary addresses, based on [Resend](https://resend.com/) service.
 
-### 功能特性
+### Features
 
-- 📨 **临时邮箱发件**：可以使用创建的临时邮箱作为发件人发送邮件
-- 🎯 **角色权限控制**：不同角色有不同的每日发件限制
-- 💌 **支持 HTML**：支持发送富文本格式邮件
+- 📨 **Send from Temp Email**: Use created temporary emails as sender
+- 🎯 **Role Limits**: Different roles have different daily sending limits
+- 💌 **HTML Support**: Supports rich text email format
 
-### 角色发件权限
+### Role Sending Limits
 
-| 角色 | 每日发件限制 | 说明 |
-|------|-------------|------|
-| 皇帝 (Emperor) | 无限制 | 网站管理员，无发件限制 |
-| 公爵 (Duke) | 5封/天 | 默认每日可发送5封邮件 |
-| 骑士 (Knight) | 2封/天 | 默认每日可发送2封邮件 |
-| 平民 (Civilian) | 禁止发件 | 无发件权限 |
+| Role | Daily Limit | Description |
+|------|-------------|-------------|
+| Emperor | Unlimited | Admin has no limits |
+| Duke | 5/day | Default 5 emails per day |
+| Knight | 2/day | Default 2 emails per day |
+| Civilian | Forbidden | No sending permission |
 
-> 💡 **提示**：皇帝可以在个人中心的邮件服务配置中自定义公爵和骑士的每日发件限制。
+> 💡 **Tip**: The Emperor can customize the daily limits for Dukes and Knights in the Mail Service Configuration.
 
-### 配置发件服务
+### Configure Sending Service
 
-1. **获取 Resend API Key**
-   - 访问 [Resend 官网](https://resend.com/) 注册账号
-   - 在控制台中创建 API Key
-   - 复制 API Key 供后续配置使用
+1. **Get Resend API Key**
+   - Register at [Resend](https://resend.com/)
+   - Create API Key in console
+   - Copy API Key for later use
 
-2. **配置发件服务**
-   - 皇帝角色登录 MoeMail
-   - 进入个人中心页面
-   - 在"Resend 发件服务配置"部分：
-     - 启用发件服务开关
-     - 填入 Resend API Key
-     - 设置公爵和骑士的每日发件限制（可选）
-   - 点击保存配置
+2. **Configure Service**
+   - Login as Emperor
+   - Go to User Profile
+   - In "Resend Service Configuration":
+     - Enable Sending Service switch
+     - Enter Resend API Key
+     - Set daily limits for Duke and Knight (Optional)
+   - Save configuration
 
-3. **验证配置**
-   - 配置保存后，有权限的用户在邮箱列表页面会看到"发送邮件"按钮
-   - 点击按钮可以打开发件对话框进行测试
+3. **Verify Configuration**
+   - After saving, authorized users will see a "Send Email" button in the email list
+   - Click to open dialog and test
 
-### 使用发件功能
+### How to Send
 
-1. **创建临时邮箱**
-   - 在邮箱页面创建一个新的临时邮箱
+1. **Create Temp Email**
+   - Create a new temporary email in Mailbox page
 
-2. **发送邮件**
-   - 在邮箱列表中找到要使用的邮箱
-   - 点击邮箱旁边的"发送邮件"按钮
-   - 在弹出的对话框中填写：
-     - 收件人邮箱地址
-     - 邮件主题
-     - 邮件内容（支持 HTML 格式）
-   - 点击"发送"按钮
+2. **Send Email**
+   - Find the email in the list
+   - Click "Send Email" button next to it
+   - Fill in:
+     - Recipient address
+     - Subject
+     - Content (supports HTML)
+   - Click "Send"
 
-3. **查看发送记录**
-   - 发送的邮件会自动保存到对应邮箱的消息列表中
-   - 可以在邮箱详情页面查看所有发送和接收的邮件
+3. **View History**
+   - Sent emails are saved in the message list of the corresponding mailbox
+   - View all sent/received emails in mailbox detail page
 
-### 注意事项
+### Notes
 
-- 📋 **Resend 限制**：请注意 Resend 服务的发送限制和定价政策
-- 🔐 **域名验证**：使用自定义域名发件需要在 Resend 中验证域名
-- 🚫 **反垃圾邮件**：请遵守邮件发送规范，避免发送垃圾邮件
-- 📊 **配额监控**：系统会自动统计每日发件数量，达到限额后将无法继续发送
-- 🔄 **配额重置**：每日发件配额在每天 00:00 自动重置
+- 📋 **Resend Limits**: Please note Resend's sending limits and pricing
+- 🔐 **Domain Verification**: Using custom domains requires verification in Resend
+- 🚫 **Anti-Spam**: Please follow email sending standards, avoid spamming
+- 📊 **Quota Monitoring**: System counts daily usage, stops sending when limit reached
+- 🔄 **Quota Reset**: Daily quota resets at 00:00
 
-## Webhook 集成
+## Webhook Integration
 
-当收到新邮件时，系统会向用户配置并且已启用的 Webhook URL 发送 POST 请求。
+When a new email is received, the system sends a POST request to the configured and enabled Webhook URL.
 
-### 请求头
+### Request Header
 ```http
 Content-Type: application/json
 X-Webhook-Event: new_message
 ```
 
-### 请求体
+### Request Body
 ```json
 {
   "emailId": "email-uuid",
   "messageId": "message-uuid",
   "fromAddress": "sender@example.com",
-  "subject": "邮件主题",
-  "content": "邮件文本内容",
-  "html": "邮件HTML内容",
+  "subject": "Email Subject",
+  "content": "Email Text Content",
+  "html": "Email HTML Content",
   "receivedAt": "2024-01-01T12:00:00.000Z",
   "toAddress": "your-email@moemail.app"
 }
 ```
 
-### 配置说明
-1. 点击个人头像，进入个人中心
-2. 在个人中心启用 Webhook
-3. 设置接收通知的 URL
-4. 点击测试按钮验证配置
-5. 保存配置后即可接收新邮件通知
+### Configuration
+1. Click avatar to enter User Profile
+2. Enable Webhook
+3. Set notification URL
+4. Click Test button
+5. Save to receive notifications
 
-### 测试
+### Testing
 
-项目提供了一个简单的测试服务器, 可以通过如下命令运行:
+The project provides a simple test server:
 
 ```bash
 pnpm webhook-test-server
 ```
 
-测试服务器会在本地启动一个 HTTP 服务器，监听 3001 端口（http://localhost:3001）, 并打印收到的 Webhook 消息详情。
+The test server listens on port 3001 (http://localhost:3001) and prints received Webhook details.
 
-如果需要进行外网测试，可以通过 Cloudflare Tunnel 将服务暴露到外网：
+For external testing, use Cloudflare Tunnel:
 ```bash
 pnpx cloudflared tunnel --url http://localhost:3001
 ```
 
-### 注意事项
-- Webhook 接口应在 10 秒内响应
-- 非 2xx 响应码会触发重试
+### Notes
+- Webhook must respond within 10 seconds
+- Non-2xx response triggers retry
 
 ## OpenAPI
 
-本项目提供了 OpenAPI 接口，支持通过 API Key 进行访问。API Key 可以在个人中心页面创建（需要是公爵或皇帝角色）。
+The project provides OpenAPI interfaces, accessible via API Key. API Keys can be created in User Profile (Requires Duke or Emperor role).
 
-### 使用 API Key
+### Using API Key
 
-在请求头中添加 API Key：
+Add API Key to request header:
 ```http
 X-API-Key: YOUR_API_KEY
 ```
 
-### API 接口
+### API Endpoints
 
-#### 获取系统配置
+#### Get System Config
 ```http
 GET /api/config
 ```
-返回响应：
+Response:
 ```json
 {
   "defaultRole": "CIVILIAN",
@@ -429,13 +451,8 @@ GET /api/config
   "maxEmails": "10"
 }
 ```
-响应字段说明：
-- `defaultRole`: 新用户默认角色，可选值：`CIVILIAN`（平民）、`KNIGHT`（骑士）、`DUKE`（公爵）
-- `emailDomains`: 支持的邮箱域名，多个域名用逗号分隔
-- `adminContact`: 管理员联系方式
-- `maxEmails`: 每个用户可创建的最大邮箱数量
 
-#### 创建临时邮箱
+#### Generate Temp Email
 ```http
 POST /api/emails/generate
 Content-Type: application/json
@@ -446,185 +463,243 @@ Content-Type: application/json
   "domain": "moemail.app"
 }
 ```
-参数说明：
-- `name`: 邮箱前缀，可选
-- `expiryTime`: 有效期（毫秒），可选值：3600000（1小时）、86400000（1天）、604800000（7天）、0（永久）
-- `domain`: 邮箱域名，可通过 `/api/config` 接口获取
+Params:
+- `name`: Prefix (optional)
+- `expiryTime`: Validity in ms. 3600000(1h), 86400000(24h), 604800000(7d), 0(Permanent)
+- `domain`: From config
 
-返回响应：
+Response:
 ```json
 {
   "id": "email-uuid-123",
   "email": "test@moemail.app"
 }
 ```
-响应字段说明：
-- `id`: 邮箱的唯一标识符
-- `email`: 创建的邮箱地址
 
-#### 获取邮箱列表
+#### Get Email List
 ```http
 GET /api/emails?cursor=xxx
 ```
-参数说明：
-- `cursor`: 分页游标，可选
 
-返回响应：
-```json
-{
-  "emails": [
-    {
-      "id": "email-uuid-123",
-      "address": "test@moemail.app",
-      "createdAt": "2024-01-01T12:00:00.000Z",
-      "expiresAt": "2024-01-02T12:00:00.000Z",
-      "userId": "user-uuid-456"
-    }
-  ],
-  "nextCursor": "encoded-cursor-string",
-  "total": 5
-}
-```
-响应字段说明：
-- `emails`: 邮箱列表数组
-- `nextCursor`: 下一页游标，用于分页请求
-- `total`: 邮箱总数量
-
-#### 获取指定邮箱邮件列表
+#### Get Messages for Email
 ```http
 GET /api/emails/{emailId}?cursor=xxx
 ```
-参数说明：
-- `emailId`: 邮箱的唯一标识符，必填
-- `cursor`: 分页游标，可选
 
-返回响应：
-```json
-{
-  "messages": [
-    {
-      "id": "message-uuid-789",
-      "from_address": "sender@example.com",
-      "subject": "邮件主题",
-      "received_at": 1704110400000
-    }
-  ],
-  "nextCursor": "encoded-cursor-string",
-  "total": 3
-}
-```
-响应字段说明：
-- `messages`: 邮件列表数组
-- `nextCursor`: 下一页游标，用于分页请求
-- `total`: 邮件总数量
-
-#### 删除邮箱
+#### Delete Email
 ```http
 DELETE /api/emails/{emailId}
 ```
-参数说明：
-- `emailId`: 邮箱的唯一标识符，必填
 
-返回响应：
-```json
-{
-  "success": true
-}
-```
-响应字段说明：
-- `success`: 删除操作是否成功
-
-#### 获取单封邮件内容
+#### Get Single Message
 ```http
 GET /api/emails/{emailId}/{messageId}
 ```
-参数说明：
-- `emailId`: 邮箱的唯一标识符，必填
-- `messageId`: 邮件的唯一标识符，必填
 
-返回响应：
+#### Create Email Share Link
+```http
+POST /api/emails/{emailId}/share
+Content-Type: application/json
+
+{
+  "expiresIn": 86400000
+}
+```
+
+#### Get Email Share Links
+```http
+GET /api/emails/{emailId}/share
+```
+
+#### Delete Email Share Link
+```http
+DELETE /api/emails/{emailId}/share/{shareId}
+```
+
+#### Create Message Share Link
+```http
+POST /api/emails/{emailId}/messages/{messageId}/share
+Content-Type: application/json
+
+{
+  "expiresIn": 86400000
+}
+```
+
+#### Get Message Share Links
+```http
+GET /api/emails/{emailId}/messages/{messageId}/share
+```
+
+#### Delete Message Share Link
+```http
+DELETE /api/emails/{emailId}/messages/{messageId}/share/{shareId}
+```
+
+## CLI Tool
+
+MoeMail provides an agent-first CLI tool for AI agents and automation workflows.
+
+### Install
+
+```bash
+npm i -g @moemail/cli
+```
+
+### Quick Start
+
+```bash
+# Configure API endpoint and key
+moemail config set api-url https://moemail.app
+moemail config set api-key YOUR_API_KEY
+
+# Create temporary email
+moemail create --domain moemail.app --expiry 1h --json
+
+# List mailboxes
+moemail list --json
+
+# List messages in a mailbox
+moemail list --email-id <id> --json
+
+# Wait for new messages (polling)
+moemail wait --email-id <id> --timeout 120 --json
+
+# Read message content
+moemail read --email-id <id> --message-id <id> --json
+
+# Send an email from the temporary address
+moemail send --email-id <id> --to user@example.com --subject "Hello" --content "Body text" --json
+
+# Delete a single message
+moemail delete --email-id <id> --message-id <id>
+
+# Delete the whole mailbox
+moemail delete --email-id <id>
+```
+
+### Agent Workflow
+
+A typical AI agent verification flow in 3 tool calls:
+
+```bash
+# 1. Create mailbox
+EMAIL=$(moemail create --domain moemail.app --expiry 1h --json)
+EMAIL_ID=$(echo $EMAIL | jq -r '.id')
+ADDRESS=$(echo $EMAIL | jq -r '.address')
+
+# 2. Wait for verification email
+MSG=$(moemail wait --email-id $EMAIL_ID --timeout 120 --json)
+MSG_ID=$(echo $MSG | jq -r '.messageId')
+
+# 3. Read content, extract verification code
+CONTENT=$(moemail read --email-id $EMAIL_ID --message-id $MSG_ID --json)
+```
+
+### AI Agent Skill
+
+Install the built-in skill so AI agents (Claude Code, Codex, etc.) automatically know how to use MoeMail:
+
+```bash
+# Auto-detect installed agent platforms and install
+moemail skill install
+
+# Or specify a platform
+moemail skill install --platform claude
+moemail skill install --platform codex
+```
+
+For full documentation, see [packages/cli/README.md](packages/cli/README.md).
+
+## MCP Server
+
+MoeMail also ships an [MCP](https://modelcontextprotocol.io) server, so any
+MCP-capable client (Claude Desktop, Cursor, Cline, …) gets native temporary-email
+tools without shelling out to the CLI.
+
+### Tools
+
+| Tool | Description |
+|------|-------------|
+| `create_email` | Create a temporary mailbox (`1h` / `24h` / `3d` / `permanent`) |
+| `list_emails` | List mailboxes owned by the API key |
+| `list_messages` | List messages in a mailbox |
+| `read_message` | Read full text/HTML of a message |
+| `wait_for_email` | Poll for a new message (bounded; returns `status: "timeout"` to retry) |
+| `send_email` | Send from a temporary address |
+| `delete_email` | Delete a mailbox |
+| `delete_message` | Delete a single message |
+
+### Setup
+
+Add the server to your MCP client config (e.g. Claude Desktop `claude_desktop_config.json`).
+Credentials are passed via environment variables:
+
 ```json
 {
-  "message": {
-    "id": "message-uuid-789",
-    "from_address": "sender@example.com",
-    "subject": "邮件主题",
-    "content": "邮件文本内容",
-    "html": "<p>邮件HTML内容</p>",
-    "received_at": 1704110400000
+  "mcpServers": {
+    "moemail": {
+      "command": "npx",
+      "args": ["-y", "@moemail/mcp"],
+      "env": {
+        "MOEMAIL_API_KEY": "YOUR_API_KEY",
+        "MOEMAIL_API_URL": "https://moemail.app"
+      }
+    }
   }
 }
 ```
-响应字段说明：
-- `message`: 邮件详细信息对象
-- `id`: 邮件的唯一标识符
-- `from_address`: 发件人邮箱地址
-- `subject`: 邮件主题
-- `content`: 邮件纯文本内容
-- `html`: 邮件HTML内容
-- `received_at`: 接收时间（时间戳）
 
-### 使用示例
+For full documentation, see [packages/mcp/README.md](packages/mcp/README.md).
 
-使用 curl 创建临时邮箱：
-```bash
-curl -X POST https://your-domain.com/api/emails/generate \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "test",
-    "expiryTime": 3600000,
-    "domain": "moemail.app"
-  }'
-```
+## Environment Variables
 
-使用 JavaScript 获取邮件列表：
-```javascript
-const res = await fetch('https://your-domain.com/api/emails/your-email-id', {
-  headers: {
-    'X-API-Key': 'YOUR_API_KEY'
-  }
-});
-const data = await res.json();
-```
-
-## 环境变量
-
-本项目使用以下环境变量：
-
-### 认证相关
+### Authentication
 - `AUTH_GITHUB_ID`: GitHub OAuth App ID
 - `AUTH_GITHUB_SECRET`: GitHub OAuth App Secret
-- `AUTH_SECRET`: NextAuth Secret，用来加密 session，请设置一个随机字符串
+- `AUTH_GOOGLE_ID`: Google OAuth App ID
+- `AUTH_GOOGLE_SECRET`: Google OAuth App Secret
+- `AUTH_SECRET`: NextAuth Secret
 
-### Cloudflare 配置
+### Cloudflare
 - `CLOUDFLARE_API_TOKEN`: Cloudflare API Token
 - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare Account ID
-- `DATABASE_NAME`: D1 数据库名称
-- `DATABASE_ID`: D1 数据库 ID (可选, 如果不填, 则会自动通过 Cloudflare API 获取)
-- `KV_NAMESPACE_NAME`: Cloudflare KV namespace 名称，用于存储网站配置
-- `KV_NAMESPACE_ID`: Cloudflare KV namespace ID，用于存储网站配置 （可选， 如果不填, 则会自动通过 Cloudflare API 获取）
-- `CUSTOM_DOMAIN`: 网站自定义域名, 如：moemail.app (可选， 如果不填, 则会使用 Cloudflare Pages 默认域名)
-- `PROJECT_NAME`: Pages 项目名 （可选，如果不填，则为 moemail） 
+- `DATABASE_NAME`: D1 Database Name
+- `DATABASE_ID`: D1 Database ID (Optional, auto-fetched if empty)
+- `KV_NAMESPACE_NAME`: KV Name
+- `KV_NAMESPACE_ID`: KV ID (Optional, auto-fetched if empty)
+- `CUSTOM_DOMAIN`: Custom domain
+- `PROJECT_NAME`: Pages Project Name
 
-## Github OAuth App 配置
+## Github OAuth App Configuration
 
-- 登录 [Github Developer](https://github.com/settings/developers) 创建一个新的 OAuth App
-- 生成一个新的 `Client ID` 和 `Client Secret`
-- 设置 `Application name` 为 `<your-app-name>`
-- 设置 `Homepage URL` 为 `https://<your-domain>`
-- 设置 `Authorization callback URL` 为 `https://<your-domain>/api/auth/callback/github`
+1. Login [Github Developer](https://github.com/settings/developers) create new OAuth App
+2. Generate `Client ID` and `Client Secret`
+3. Configure:
+   - `Application name`: `<your-app-name>`
+   - `Homepage URL`: `https://<your-domain>`
+   - `Authorization callback URL`: `https://<your-domain>/api/auth/callback/github`
 
+## Google OAuth App Configuration
 
-## 贡献
+1. Visit [Google Cloud Console](https://console.cloud.google.com/) create project
+2. Configure OAuth consent screen
+3. Create OAuth Client ID
+   - Type: Web application
+   - Authorized Javascript origins: `https://<your-domain>`
+   - Authorized redirect URIs: `https://<your-domain>/api/auth/callback/google`
+4. Get `Client ID` and `Client Secret`
+5. Configure env vars `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET`
 
-欢迎提交 Pull Request 或者 Issue来帮助改进这个项目
+## Contribution
 
-## 许可证
+Welcome to submit Pull Requests or Issues to help improve this project.
 
-本项目采用 [MIT](LICENSE) 许可证
+## License
 
-## 交流
+[MIT](LICENSE)
+
+## Community
 <table>
   <tr style="max-width: 360px">
     <td>
@@ -636,18 +711,18 @@ const data = await res.json();
   </tr>
   <tr style="max-width: 360px">
     <td>
-      关注公众号，了解更多项目进展以及AI，区块链，独立开发资讯
+      Follow official account for more project updates, AI, Blockchain, and Indie Dev news.
     </td>
     <td>
-      添加微信，备注 "MoeMail" 拉你进微信交流群
+      Add WeChat, remark "MoeMail" to join the WeChat community group.
     </td>
   </tr>
 </table>
 
-## 支持
+## Support
 
-如果你喜欢这个项目，欢迎给它一个 Star ⭐️
-或者进行赞助
+If you like this project, please give it a Star ⭐️
+Or sponsor it
 <br />
 <br />
 <img src="https://pic.otaku.ren/20240212/AQADPrgxGwoIWFZ-.jpg" style="width: 400px;"/>

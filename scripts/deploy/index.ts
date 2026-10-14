@@ -117,11 +117,11 @@ const updateDatabaseConfig = (dbId: string) => {
     "wrangler.email.json",
     "wrangler.cleanup.json",
   ];
-  
+
   for (const filename of configFiles) {
     const configPath = resolve(filename);
     if (!existsSync(configPath)) continue;
-    
+
     try {
       const json = JSON.parse(readFileSync(configPath, "utf-8"));
       if (json.d1_databases && json.d1_databases.length > 0) {
@@ -140,7 +140,7 @@ const updateDatabaseConfig = (dbId: string) => {
  */
 const updateKVConfig = (namespaceId: string) => {
   console.log(`📝 Updating KV namespace ID (${namespaceId}) in configurations...`);
-  
+
   // KV命名空间只在主wrangler.json中使用
   const wranglerPath = resolve("wrangler.json");
   if (existsSync(wranglerPath)) {
@@ -165,11 +165,11 @@ const checkAndCreateDatabase = async () => {
 
   try {
     const database = await getDatabase();
-    
+
     if (!database || !database.uuid) {
       throw new Error('Database object is missing a valid UUID');
     }
-    
+
     updateDatabaseConfig(database.uuid);
     console.log(`✅ Database "${DATABASE_NAME}" already exists (ID: ${database.uuid})`);
   } catch (error) {
@@ -177,11 +177,11 @@ const checkAndCreateDatabase = async () => {
       console.log(`⚠️ Database not found, creating new database...`);
       try {
         const database = await createDatabase();
-        
+
         if (!database || !database.uuid) {
           throw new Error('Database object is missing a valid UUID');
         }
-        
+
         updateDatabaseConfig(database.uuid);
         console.log(`✅ Database "${DATABASE_NAME}" created successfully (ID: ${database.uuid})`);
       } catch (createError) {
@@ -259,7 +259,7 @@ const checkAndCreatePages = async () => {
       if (!CUSTOM_DOMAIN && pages.subdomain) {
         console.log("⚠️ CUSTOM_DOMAIN is empty, using pages default domain...");
         console.log("📝 Updating environment variables...");
-        
+
         // 更新环境变量为默认的Pages域名
         const appUrl = `https://${pages.subdomain}`;
         updateEnvVar("CUSTOM_DOMAIN", appUrl);
@@ -278,56 +278,88 @@ const pushPagesSecret = () => {
   console.log("🔐 Pushing environment secrets to Pages...");
 
   // 定义运行时所需的环境变量列表
-  const runtimeEnvVars = ['AUTH_GITHUB_ID', 'AUTH_GITHUB_SECRET', 'AUTH_SECRET'];
+  const runtimeEnvVars = [
+    'AUTH_GITHUB_ID', 
+    'AUTH_GITHUB_SECRET', 
+    'AUTH_GOOGLE_ID', 
+    'AUTH_GOOGLE_SECRET', 
+    'AUTH_SECRET'
+  ];
 
-  // 兼容老的部署方式，如果这些环境变量不存在，则说明是老的部署方式，跳过推送
-  for (const varName of runtimeEnvVars) {
-    if (!process.env[varName]) {
-      console.log(`🔐 Skipping pushing secrets to Pages...`);
-      return;
-    }
-  }
-  
   try {
     // 确保.env文件存在
     if (!existsSync(resolve('.env'))) {
       setupEnvFile();
     }
-    
-    // 创建一个临时文件，只包含运行时所需的环境变量
+
+    // 读取.env文件内容
     const envContent = readFileSync(resolve('.env'), 'utf-8');
-    const runtimeEnvFile = resolve('.env.runtime');
     
-    // 从.env文件中提取运行时变量
-    const runtimeEnvContent = envContent
-      .split('\n')
-      .filter(line => {
-        const trimmedLine = line.trim();
-        // 跳过注释和空行
-        if (!trimmedLine || trimmedLine.startsWith('#')) return false;
-        
-        // 检查是否为运行时所需的环境变量
-        for (const varName of runtimeEnvVars) {
-          if (line.startsWith(`${varName} =`) || line.startsWith(`${varName}=`)) {
-            return true;
-          }
-        }
-        return false;
-      })
-      .join('\n');
+    // 解析环境变量为对象
+    const secrets: Record<string, string> = {};
     
-    // 写入临时文件
-    writeFileSync(runtimeEnvFile, runtimeEnvContent);
-    
+    envContent.split('\n').forEach(line => {
+      const trimmedLine = line.trim();
+      
+      // 跳过注释和空行
+      if (!trimmedLine || trimmedLine.startsWith('#')) {
+        return;
+      }
+      
+      // 解析键值对
+      const equalIndex = trimmedLine.indexOf('=');
+      if (equalIndex === -1) {
+        return;
+      }
+      
+      const key = trimmedLine.substring(0, equalIndex).trim();
+      let value = trimmedLine.substring(equalIndex + 1).trim();
+      
+      // 移除引号
+      value = value.replace(/^["']|["']$/g, '');
+      
+      // 只保留运行时所需的环境变量，且值不为空
+      if (runtimeEnvVars.includes(key) && value.length > 0) {
+        secrets[key] = value;
+      }
+    });
+
+    // 检查是否有需要推送的secrets
+    if (Object.keys(secrets).length === 0) {
+      console.log("⚠️ No runtime secrets found to push");
+      return;
+    }
+
+    // 创建JSON格式的临时文件
+    const runtimeEnvFile = resolve('.env.runtime.json');
+    writeFileSync(runtimeEnvFile, JSON.stringify(secrets, null, 2));
+
+    console.log(`📝 Found ${Object.keys(secrets).length} secrets to push:`, Object.keys(secrets).join(', '));
+
     // 使用临时文件推送secrets
-    execSync(`pnpm dlx wrangler pages secret bulk ${runtimeEnvFile}`, { stdio: "inherit" });
-    
+    execSync(`pnpm dlx wrangler pages secret bulk ${runtimeEnvFile}`, { 
+      stdio: "inherit" 
+    });
+
     // 清理临时文件
-    execSync(`rm ${runtimeEnvFile}`, { stdio: "inherit" });
-    
+    if (existsSync(runtimeEnvFile)) {
+      execSync(`rm ${runtimeEnvFile}`, { stdio: "inherit" });
+    }
+
     console.log("✅ Secrets pushed successfully");
   } catch (error) {
     console.error("❌ Failed to push secrets:", error);
+    
+    // 确保清理临时文件
+    const runtimeEnvFile = resolve('.env.runtime.json');
+    if (existsSync(runtimeEnvFile)) {
+      try {
+        execSync(`rm ${runtimeEnvFile}`, { stdio: "inherit" });
+      } catch (cleanupError) {
+        console.error("⚠️ Failed to cleanup temporary file:", cleanupError);
+      }
+    }
+    
     throw error;
   }
 };
@@ -381,14 +413,14 @@ const setupEnvFile = () => {
   console.log("📄 Setting up environment file...");
   const envFilePath = resolve(".env");
   const envExamplePath = resolve(".env.example");
-  
+
   // 如果.env文件不存在，则从.env.example复制创建
   if (!existsSync(envFilePath) && existsSync(envExamplePath)) {
     console.log("⚠️ .env file does not exist, creating from example...");
-    
+
     // 从示例文件复制
     let envContent = readFileSync(envExamplePath, "utf-8");
-    
+
     // 填充当前的环境变量
     const envVarMatches = envContent.match(/^([A-Z_]+)\s*=\s*".*?"/gm);
     if (envVarMatches) {
@@ -400,7 +432,7 @@ const setupEnvFile = () => {
         }
       }
     }
-    
+
     writeFileSync(envFilePath, envContent);
     console.log("✅ .env file created from example");
   } else if (existsSync(envFilePath)) {
@@ -417,22 +449,22 @@ const setupEnvFile = () => {
 const updateEnvVar = (name: string, value: string) => {
   // 首先更新进程环境变量
   process.env[name] = value;
-  
+
   // 然后尝试更新.env文件
   const envFilePath = resolve(".env");
   if (!existsSync(envFilePath)) {
     setupEnvFile();
   }
-  
+
   let envContent = readFileSync(envFilePath, "utf-8");
   const regex = new RegExp(`^${name}\\s*=\\s*".*?"`, "m");
-  
+
   if (envContent.match(regex)) {
     envContent = envContent.replace(regex, `${name} = "${value}"`);
   } else {
     envContent += `\n${name} = "${value}"`;
   }
-  
+
   writeFileSync(envFilePath, envContent);
   console.log(`✅ Updated ${name} in .env file`);
 };

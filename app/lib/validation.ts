@@ -7,7 +7,8 @@ export const authSchema = z.object({
     .regex(/^[a-zA-Z0-9_-]+$/, "用户名只能包含字母、数字、下划线和横杠")
     .refine(val => !val.includes('@'), "用户名不能是邮箱格式"),
   password: z.string()
-    .min(8, "密码长度必须大于等于8位")
+    .min(8, "密码长度必须大于等于8位"),
+  turnstileToken: z.string().optional()
 })
 
 export type AuthSchema = z.infer<typeof authSchema>

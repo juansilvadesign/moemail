@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+import { usePathname } from "next/navigation"
 import { Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,8 +12,16 @@ import {
 } from "@/components/ui/tooltip"
 
 export function FloatMenu() {
+  const t = useTranslations("common")
+  const pathname = usePathname()
+  
+  // 在分享页面隐藏GitHub悬浮框
+  if (pathname.includes("/shared/")) {
+    return null
+  }
+  
   return (
-    <div className="fixed bottom-6 right-6">
+    <div className="fixed bottom-6 right-6 z-50">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -24,12 +34,12 @@ export function FloatMenu() {
               <Github 
                 className="w-4 h-4 transition-all duration-300 text-primary group-hover:scale-110"
               />
-              <span className="sr-only">获取网站源代码</span>
+              <span className="sr-only">{t("github")}</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>
             <div className="text-sm">
-              <p>获取网站源代码</p>
+              <p>{t("github")}</p>
             </div>
           </TooltipContent>
         </Tooltip>

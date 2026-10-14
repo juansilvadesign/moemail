@@ -1,6 +1,6 @@
 import { integer, sqliteTable, text, primaryKey, uniqueIndex, index } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 // https://authjs.dev/getting-started/adapters/drizzle
 export const users = sqliteTable("user", {
@@ -35,6 +35,7 @@ export const accounts = sqliteTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
+    userIdIdx: index("account_user_id_idx").on(account.userId),
   })
 )
 
@@ -48,6 +49,8 @@ export const emails = sqliteTable("email", {
   expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
 }, (table) => ({
   expiresAtIdx: index("email_expires_at_idx").on(table.expiresAt),
+  userIdIdx: index("email_user_id_idx").on(table.userId),
+  addressLowerIdx: index("email_address_lower_idx").on(sql`LOWER(${table.address})`),
 }))
 
 export const messages = sqliteTable("message", {
@@ -69,6 +72,7 @@ export const messages = sqliteTable("message", {
     .$defaultFn(() => new Date()),
 }, (table) => ({
   emailIdIdx: index("message_email_id_idx").on(table.emailId),
+  emailIdReceivedAtTypeIdx: index("message_email_id_received_at_type_idx").on(table.emailId, table.receivedAt, table.type),
 }))
 
 export const webhooks = sqliteTable('webhook', {
@@ -84,7 +88,9 @@ export const webhooks = sqliteTable('webhook', {
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
     .$defaultFn(() => new Date()),
-})
+}, (table) => ({
+  userIdIdx: index('webhook_user_id_idx').on(table.userId),
+}))
 
 export const roles = sqliteTable("role", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -100,6 +106,7 @@ export const userRoles = sqliteTable("user_role", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 }, (table) => ({
   pk: primaryKey({ columns: [table.userId, table.roleId] }),
+  userIdIdx: index("user_role_user_id_idx").on(table.userId),
 }));
 
 export const apiKeys = sqliteTable('api_keys', {
@@ -111,7 +118,38 @@ export const apiKeys = sqliteTable('api_keys', {
   expiresAt: integer('expires_at', { mode: 'timestamp' }),
   enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
 }, (table) => ({
-  nameUserIdUnique: uniqueIndex('name_user_id_unique').on(table.name, table.userId)
+  nameUserIdUnique: uniqueIndex('name_user_id_unique').on(table.name, table.userId),
+  userIdIdx: index('api_keys_user_id_idx').on(table.userId),
+}));
+
+export const emailShares = sqliteTable('email_share', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  emailId: text('email_id')
+    .notNull()
+    .references(() => emails.id, { onDelete: "cascade" }),
+  token: text('token').notNull().unique(),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }),
+}, (table) => ({
+  emailIdIdx: index('email_share_email_id_idx').on(table.emailId),
+  tokenIdx: index('email_share_token_idx').on(table.token),
+}));
+
+export const messageShares = sqliteTable('message_share', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  messageId: text('message_id')
+    .notNull()
+    .references(() => messages.id, { onDelete: "cascade" }),
+  token: text('token').notNull().unique(),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }),
+}, (table) => ({
+  messageIdIdx: index('message_share_message_id_idx').on(table.messageId),
+  tokenIdx: index('message_share_token_idx').on(table.token),
 }));
 
 
@@ -141,4 +179,18 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const rolesRelations = relations(roles, ({ many }) => ({
   userRoles: many(userRoles),
+}));
+
+export const emailSharesRelations = relations(emailShares, ({ one }) => ({
+  email: one(emails, {
+    fields: [emailShares.emailId],
+    references: [emails.id],
+  }),
+}));
+
+export const messageSharesRelations = relations(messageShares, ({ one }) => ({
+  message: one(messages, {
+    fields: [messageShares.messageId],
+    references: [messages.id],
+  }),
 }));

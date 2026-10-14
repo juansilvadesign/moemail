@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Send, Inbox } from "lucide-react"
 import { Tabs, SlidingTabsList, SlidingTabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { MessageList } from "./message-list"
@@ -17,6 +18,7 @@ interface MessageListContainerProps {
 }
 
 export function MessageListContainer({ email, onMessageSelect, selectedMessageId, refreshTrigger }: MessageListContainerProps) {
+  const t = useTranslations("emails.messages")
   const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received')
   const { canSend: canSendEmails } = useSendPermission()
 
@@ -33,11 +35,11 @@ export function MessageListContainer({ email, onMessageSelect, selectedMessageId
             <SlidingTabsList>
               <SlidingTabsTrigger value="received">
                 <Inbox className="h-4 w-4" />
-                收件箱
+                {t("received")}
               </SlidingTabsTrigger>
               <SlidingTabsTrigger value="sent">
                 <Send className="h-4 w-4" />
-                已发送
+                {t("sent")}
               </SlidingTabsTrigger>
             </SlidingTabsList>
           </div>

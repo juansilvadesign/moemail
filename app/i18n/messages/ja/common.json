@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "MoeMail"
+  },
+  "actions": {
+    "ok": "OK",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除"
+  },
+  "nav": {
+    "home": "ホーム",
+    "login": "ログイン",
+    "profile": "プロフィール",
+    "logout": "ログアウト",
+    "backToMailbox": "メールボックスに戻る"
+  },
+  "github": "ソースコードを入手"
+}
+

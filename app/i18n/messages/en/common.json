@@ -1,0 +1,19 @@
+{
+  "app": {
+    "name": "MoeMail"
+  },
+  "actions": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "profile": "Profile",
+    "logout": "Logout",
+    "backToMailbox": "Back to Mailbox"
+  },
+  "github": "Get Source Code"
+}
